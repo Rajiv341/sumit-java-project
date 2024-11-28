@@ -1,0 +1,121 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// Task Class
+class Task {
+    private String description;
+    private boolean isComplete;
+
+    public Task(String description) {
+        this.description = description;
+        this.isComplete = false;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public boolean isComplete() {
+        return isComplete;
+    }
+
+    public void markComplete() {
+        this.isComplete = true;
+    }
+
+    @Override
+    public String toString() {
+        return (isComplete ? "[✔] " : "[ ] ") + description;
+    }
+}
+
+// ToDoList Class
+class ToDoList {
+    private ArrayList<Task> tasks;
+
+    public ToDoList() {
+        tasks = new ArrayList<>();
+    }
+
+    public void addTask(String description) {
+        tasks.add(new Task(description));
+    }
+
+    public void viewTasks() {
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks available.");
+        } else {
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println((i + 1) + ". " + tasks.get(i));
+            }
+        }
+    }
+
+    public void markTaskComplete(int taskIndex) {
+        if (taskIndex < 1 || taskIndex > tasks.size()) {
+            System.out.println("Invalid task number.");
+        } else {
+            tasks.get(taskIndex - 1).markComplete();
+            System.out.println("Task marked as complete.");
+        }
+    }
+
+    public void deleteTask(int taskIndex) {
+        if (taskIndex < 1 || taskIndex > tasks.size()) {
+            System.out.println("Invalid task number.");
+        } else {
+            tasks.remove(taskIndex - 1);
+            System.out.println("Task deleted.");
+        }
+    }
+}
+
+// Main Class
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ToDoList toDoList = new ToDoList();
+        int choice;
+
+        do {
+            System.out.println("\n--- To-Do List ---");
+            System.out.println("1. Add Task");
+            System.out.println("2. View Tasks");
+            System.out.println("3. Mark Task Complete");
+            System.out.println("4. Delete Task");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter task description: ");
+                    String description = scanner.nextLine();
+                    toDoList.addTask(description);
+                    break;
+                case 2:
+                    System.out.println("\nTasks:");
+                    toDoList.viewTasks();
+                    break;
+                case 3:
+                    System.out.print("Enter task number to mark as complete: ");
+                    int completeIndex = scanner.nextInt();
+                    toDoList.markTaskComplete(completeIndex);
+                    break;
+                case 4:
+                    System.out.print("Enter task number to delete: ");
+                    int deleteIndex = scanner.nextInt();
+                    toDoList.deleteTask(deleteIndex);
+                    break;
+                case 5:
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 5);
+
+        scanner.close();
+    }
+}
